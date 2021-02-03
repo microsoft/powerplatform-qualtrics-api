@@ -7,6 +7,8 @@ The OpenAPI 3.0 compliant file is there for reference use into Azure API Managem
 The sample code implements the following actions on the Qualtrics&reg; API located at [https://api.qualtrics.com/](https://api.qualtrics.com/)
 To gain access to the API a Qualtrics account is required.
 
+*This sample is provided as-is as a reference and not intended to be used for production purposes*
+
 **Usage**
 
 * Navigate to [https://make.powerapps.com](https://make.powerapps.com).
