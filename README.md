@@ -1,14 +1,54 @@
-# Project
+# Sample integration for [Qualtrics  Surveys](https://www.qualtrics.com/) &reg into [Microsoft Power Platform](https://make.powerapps.com)
 
-> This repo has been populated by an initial template to help get you started. Please
-> make sure to update the content to build a great experience for community-building.
+> This repository contains sample code to demonstrate integration of Qualtrics $reg survey data and survey events into Microsoft Power Platform.
+> The OpenAPI 2.0 compliant SWAGGER file can be used as the base to create a Microsoft Power Platform custom connector. 
 
-As the maintainer of this project, please make a few updates:
+The sample code implements the following actions on the Qualtrics &reg API located at [https://api.qualtrics.com/](https://api.qualtrics.com/)
+To gain access to the API a Qualtrics account is required.
 
-- Improving this README.MD file to provide a great experience
-- Updating SUPPORT.MD with content about this project's support experience
-- Understanding the security reporting process in SECURITY.MD
-- Remove this section from the README
+**Triggers**
+
+* When a survey response is submitted (see caution note below)
+
+  Triggers when a response is submitted to a survey. Takes the SurveyID (e.g: SV_123) in the topic field to subscribe to the right survey events. 
+
+**Actions**
+
+* Create contact in mailing list
+
+  POST new contact data to a given Qualtrics directory and mailing list.
+DirectoryId and MailingListId can be obtained from the Qualtrics API portal.
+    
+* Get distributions for survey
+  
+  Get distributions for a given survey
+  
+* Generate distribution links
+  
+  Generate individual links for a given distribution
+
+* Retrieve distribution links
+
+  Retrieve the links generated with Generate distribution links action
+  
+* Get event subscriptions
+  
+  Get all the registered events. Will return all the events that are registered with a webhook endpoint. See the [Qualtrics API documentation](https://api.qualtrics.com/api-reference/reference/eventSubscriptions.json/paths/~1eventsubscriptions/post) for a list of topics that can be subscribed.
+  
+* Get survey
+
+  Returns a given survey
+  
+* Remove event subscription (see note below)
+
+  Dummy
+ 
+**Caution with the trigger**
+
+The trigger definition (When a survey response is submitted) registers a webhook endpoint in the Qualtrics API. Microsoft mandates that any trigger that creates a webhook includes a location header to indicate to Power Platform how to de-register the trigger. The LOCATION header points to a DELETE action. As of the time of the publication of this file the Qualtrics API **does not provide a DELETE endpoint**. The DELETE action (Remove event subscription) is only a dummy to make the specification work in PowerPlatform.
+This means that any registered webhook endpoint will continue to receive data until the respective survey is deleted.
+
+# Below figure shows the fully imported API specification in action in Microsoft Power Automate
 
 ## Contributing
 
