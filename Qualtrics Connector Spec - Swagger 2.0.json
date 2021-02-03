@@ -1,0 +1,640 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "0.2",
+        "title": "Qualtrics API",
+        "description": "Work with Qualtrics surveys, distributions and response events"
+    },
+    "host": "fra1.qualtrics.com",
+    "basePath": "/API/v3",
+    "schemes": [
+        "https"
+    ],
+    "securityDefinitions": {
+        "api_key": {
+            "type": "apiKey",
+            "name": "X-API-TOKEN",
+            "in": "header"
+        }
+    },
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/survey-definitions/{SurveyId}": {
+            "get": {
+                "summary": "Get survey",
+                "description": "Gets a single Qualtrics survey speficied by its ID",
+                "operationId": "GetSurvey",
+                "parameters": [
+                    {
+                        "name": "SurveyId",
+                        "x-ms-summary": "Survey ID",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "ID of survey (eg. SV_123)"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Survey data",
+                        "headers": {},
+                        "schema": {
+                            "$ref": "#/definitions/SurveyResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "Operation Failed."
+                    }
+                }
+            }
+        },
+        "/distributions": {
+            "get": {
+                "summary": "Get distributions for survey",
+                "description": "Gets all distributions for a given survey",
+                "operationId": "GetDistributions",
+                "parameters": [
+                    {
+                        "name": "surveyId",
+                        "in": "query",
+                        "required": true,
+                        "type": "string",
+                        "description": "The survey for which to load the distributions",
+                        "x-ms-summary": "Survey ID"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Distributions",
+                        "headers": {},
+                        "schema": {
+                            "$ref": "#/definitions/DistributionsResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "Generate distribution links",
+                "description": "Geneates links for individual distribution",
+                "operationId": "GenerateDistributionLinks",
+                "parameters": [
+                    {
+                        "name": "Distribution link generation options",
+                        "x-ms-summary": "Link options",
+                        "in": "body",
+                        "required": true,
+                        "description": "Parameters for the link generation",
+                        "schema": {
+                            "$ref": "#/definitions/CreateDistributionLinks"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "headers": {}
+                    }
+                }
+            }
+        },
+        "/distributions/{DistributionId}/links": {
+            "get": {
+                "summary": "Retrieve distribution links",
+                "description": "Retrieves all the individual links for a given distribution",
+                "operationId": "Retrievedistributionlinks",
+                "parameters": [
+                    {
+                        "name": "surveyId",
+                        "in": "query",
+                        "required": true,
+                        "type": "string",
+                        "description": "ID of the survey (eg: SV_123)",
+                        "x-ms-summary": "Survey ID"
+                    },
+                    {
+                        "name": "DistributionId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "ID of the distribution list",
+                        "x-ms-summary": "Distribution ID"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Generated list of links",
+                        "headers": {},
+                        "schema": {
+                            "$ref": "#/definitions/RetrieveDistributionLinksResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/directories/{DirectoryId}/mailinglists/{MailingListId}/contacts": {
+            "post": {
+                "summary": "Create contact in mailing list",
+                "description": "Creates a contact in a given mailing list",
+                "operationId": "CreateContactInMailinglist",
+                "parameters": [
+                    {
+                        "name": "DirectoryId",
+                        "in": "path",
+                        "type": "string",
+                        "required": true,
+                        "description": "ID of the qualtrics directory to create the contact to",
+                        "x-ms-summary": "Directory ID"
+                    },
+                    {
+                        "name": "MailingListId",
+                        "in": "path",
+                        "type": "string",
+                        "required": true,
+                        "description": "ID of the mailing list",
+                        "x-ms-summary": "Mailing list ID"
+                    },
+                    {
+                        "name": "Contact data",
+                        "x-ms-summary": "Contact data",
+                        "in": "body",
+                        "required": true,
+                        "description": "Contact data",
+                        "schema": {
+                            "$ref": "#/definitions/CreateContactInMailingList"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK - Contact created",
+                        "headers": {}
+                    }
+                }
+            }
+        },
+        "/eventsubscriptions/": {
+            "x-ms-notification-content": {
+                "description": "WebHook registration response",
+                "schema": {
+                    "$ref": "#/definitions/EventSubscriptionHookSchema"
+                }
+            },
+            "post": {
+                "description": "Subscribe to response event",
+                "summary": "Triggers when a response is submitted to a qualtrics survey",
+                "operationId": "WhenAResponseIsReceived",
+                "x-ms-trigger": "single",
+                "parameters": [
+                    {
+                        "name": "WebHookData",
+                        "in": "body",
+                        "description": "This is the request body of the webhook",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/SubscribeToEventBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK - web hook registered",
+                        "headers": {},
+                        "schema": {
+                            "$ref": "#/definitions/EventSubscriptionsResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Remove subscription to response event",
+                "description": "Remove event subscription",
+                "operationId": "WebhookDelete",
+                "parameters": [
+                    {
+                        "name": "WebHookData",
+                        "in": "body",
+                        "description": "This is the request body of the webhook",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/SubscribeToEventBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {},
+                        "schema": {
+                            "$ref": "#/definitions/EventSubscriptionsResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/eventsubscriptions/{SubscriptionId}": {
+            "get": {
+                "summary": "Get event subscriptions",
+                "description": "Get event subscriptions",
+                "operationId": "GetEventSubscriptions",
+                "parameters": [
+                    {
+                        "name": "SubscriptionId",
+                        "required": true,
+                        "in": "path",
+                        "type": "string",
+                        "description": "ID of event subscription - can be obtained from web hook response"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Event subscriptions",
+                        "headers": {},
+                        "schema": {
+                            "$ref": "#/definitions/EventSubscriptionsResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "CreateDistributionLinks": {
+            "type": "object",
+            "properties": {
+                "surveyId": {
+                    "type": "string"
+                },
+                "linkType": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "action": {
+                    "type": "string",
+                    "default": "CreateDistribution"
+                },
+                "expirationDate": {
+                    "type": "string",
+                    "example": "2021-01-21 00:00:00"
+                },
+                "mailingListId": {
+                    "type": "string"
+                }
+            }
+        },
+        "CreateContactInMailingList": {
+            "type": "object",
+            "properties": {
+                "firstName": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "unsubscribed": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "SubscribeToEventBody": {
+            "type": "object",
+            "properties": {
+                "topics": {
+                    "type": "string",
+                    "description": "The topics to subscribe to. Must follow the format surveyengine.completedResponse.[SurveyID]",
+                    "default": "surveyengine.completedResponse.<Insert SurveyID>"
+                },
+                "publicationUrl": {
+                    "type": "string",
+                    "description": "The internal publication URL - will be generated by PowerAutomate",
+                    "x-ms-notification-url": true,
+                    "x-ms-visibility": "internal"
+                },
+                "encrypt": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "topics",
+                "publicationUrl"
+            ]
+        },
+        "RetrieveDistributionLinksResponse": {
+            "type": "object",
+            "properties": {
+                "result": {
+                    "type": "object",
+                    "properties": {
+                        "elements": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "contactId": {
+                                        "type": "string"
+                                    },
+                                    "transactionId": {},
+                                    "link": {
+                                        "type": "string"
+                                    },
+                                    "exceededContactFrequency": {
+                                        "type": "boolean"
+                                    },
+                                    "linkExpiration": {
+                                        "type": "string"
+                                    },
+                                    "status": {
+                                        "type": "string"
+                                    },
+                                    "lastName": {
+                                        "type": "string"
+                                    },
+                                    "firstName": {
+                                        "type": "string"
+                                    },
+                                    "externalDataReference": {},
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "unsubscribed": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "required": [
+                                    "contactId",
+                                    "transactionId",
+                                    "link",
+                                    "exceededContactFrequency",
+                                    "linkExpiration",
+                                    "status",
+                                    "lastName",
+                                    "firstName",
+                                    "externalDataReference",
+                                    "email",
+                                    "unsubscribed"
+                                ]
+                            }
+                        },
+                        "nextPage": {}
+                    }
+                },
+                "meta": {
+                    "type": "object",
+                    "properties": {
+                        "httpStatus": {
+                            "type": "string"
+                        },
+                        "requestId": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "SurveyResponse": {
+            "type": "object",
+            "properties": {}
+        },
+        "DistributionsResponse": {
+            "type": "object",
+            "properties": {
+                "result": {
+                    "type": "object",
+                    "properties": {
+                        "elements": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "string"
+                                    },
+                                    "parentDistributionId": {},
+                                    "ownerId": {
+                                        "type": "string"
+                                    },
+                                    "organizationId": {
+                                        "type": "string"
+                                    },
+                                    "requestStatus": {
+                                        "type": "string"
+                                    },
+                                    "requestType": {
+                                        "type": "string"
+                                    },
+                                    "sendDate": {
+                                        "type": "string"
+                                    },
+                                    "createdDate": {
+                                        "type": "string"
+                                    },
+                                    "modifiedDate": {
+                                        "type": "string"
+                                    },
+                                    "customHeaders": {
+                                        "type": "object",
+                                        "properties": {}
+                                    },
+                                    "headers": {
+                                        "type": "object",
+                                        "properties": {
+                                            "fromEmail": {},
+                                            "replyToEmail": {},
+                                            "fromName": {}
+                                        }
+                                    },
+                                    "recipients": {
+                                        "type": "object",
+                                        "properties": {
+                                            "mailingListId": {
+                                                "type": "string"
+                                            },
+                                            "contactId": {},
+                                            "libraryId": {
+                                                "type": "string"
+                                            },
+                                            "sampleId": {}
+                                        }
+                                    },
+                                    "message": {
+                                        "type": "object",
+                                        "properties": {
+                                            "libraryId": {},
+                                            "messageId": {},
+                                            "messageText": {}
+                                        }
+                                    },
+                                    "surveyLink": {
+                                        "type": "object",
+                                        "properties": {
+                                            "surveyId": {
+                                                "type": "string"
+                                            },
+                                            "expirationDate": {
+                                                "type": "string"
+                                            },
+                                            "linkType": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    },
+                                    "embeddedData": {},
+                                    "stats": {
+                                        "type": "object",
+                                        "properties": {
+                                            "sent": {
+                                                "type": "integer"
+                                            },
+                                            "failed": {
+                                                "type": "integer"
+                                            },
+                                            "started": {
+                                                "type": "integer"
+                                            },
+                                            "bounced": {
+                                                "type": "integer"
+                                            },
+                                            "opened": {
+                                                "type": "integer"
+                                            },
+                                            "skipped": {
+                                                "type": "integer"
+                                            },
+                                            "finished": {
+                                                "type": "integer"
+                                            },
+                                            "complaints": {
+                                                "type": "integer"
+                                            },
+                                            "blocked": {
+                                                "type": "integer"
+                                            }
+                                        }
+                                    }
+                                },
+                                "required": [
+                                    "id",
+                                    "parentDistributionId",
+                                    "ownerId",
+                                    "organizationId",
+                                    "requestStatus",
+                                    "requestType",
+                                    "sendDate",
+                                    "createdDate",
+                                    "modifiedDate",
+                                    "customHeaders",
+                                    "headers",
+                                    "recipients",
+                                    "message",
+                                    "surveyLink",
+                                    "embeddedData",
+                                    "stats"
+                                ]
+                            }
+                        },
+                        "nextPage": {}
+                    }
+                },
+                "meta": {
+                    "type": "object",
+                    "properties": {
+                        "httpStatus": {
+                            "type": "string"
+                        },
+                        "requestId": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "EventSubscriptionsResponse": {
+            "type": "object",
+            "properties": {
+                "result": {
+                    "type": "object",
+                    "properties": {
+                        "result": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "meta": {
+                            "type": "object",
+                            "properties": {
+                                "httpStatus": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
+                "meta": {
+                    "type": "object",
+                    "properties": {
+                        "requestId": {
+                            "type": "string"
+                        },
+                        "httpStatus": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "EventSubscriptionHookSchema": {
+            "type": "object",
+            "properties": {
+                "$content-type": {
+                    "x-ms-summary": "Content type",
+                    "type": "string",
+                    "default": "application/x-www-form-urlencoded",
+                    "x-ms-visibility": "internal"
+                },
+                "$content": {
+                    "x-ms-summary": "Content",
+                    "type": "string",
+                    "x-ms-visibility": "internal",
+                    "default": "x"
+                },
+                "$formdata": {
+                    "type": "array",
+                    "x-ms-summary": "Questions and answers",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "key": {
+                                "type": "string",
+                                "x-ms-summary": " : Question"
+                            },
+                            "value": {
+                                "type": "string",
+                                "x-ms-summary": ": Answer"
+                            }
+                        },
+                        "required": [
+                            "key",
+                            "value"
+                        ]
+                    }
+                }
+            },
+            "required": [
+                "$content-type",
+                "$content"
+            ]
+        }
+    }
+}
