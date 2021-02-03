@@ -1,9 +1,9 @@
-# Sample integration for [Qualtrics  Surveys](https://www.qualtrics.com/) &reg into [Microsoft Power Platform](https://make.powerapps.com)
+# Sample integration for [Qualtrics&reg;  Surveys](https://www.qualtrics.com/) into [Microsoft Power Platform](https://make.powerapps.com)
 
 > This repository contains sample code to demonstrate integration of Qualtrics $reg survey data and survey events into Microsoft Power Platform.
 > The OpenAPI 2.0 compliant SWAGGER file can be used as the base to create a Microsoft Power Platform custom connector. 
 
-The sample code implements the following actions on the Qualtrics &reg API located at [https://api.qualtrics.com/](https://api.qualtrics.com/)
+The sample code implements the following actions on the Qualtrics&reg; API located at [https://api.qualtrics.com/](https://api.qualtrics.com/)
 To gain access to the API a Qualtrics account is required.
 
 **Triggers**
