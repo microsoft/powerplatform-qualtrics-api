@@ -1,10 +1,19 @@
 # Sample integration for [Qualtrics&reg;  Surveys](https://www.qualtrics.com/) into [Microsoft Power Platform](https://make.powerapps.com)
 
-> This repository contains sample code to demonstrate integration of Qualtrics $reg survey data and survey events into Microsoft Power Platform.
-> The OpenAPI 2.0 compliant SWAGGER file can be used as the base to create a Microsoft Power Platform custom connector. 
+This repository contains sample code to demonstrate integration of Qualtrics $reg survey data and survey events into Microsoft Power Platform.
+The OpenAPI 2.0 compliant SWAGGER file can be used as the base to create a Microsoft Power Platform custom connector. 
+The OpenAPI 3.0 compliant file is there for reference use into Azure API Management (at this point of time Power Platform does not allow OA 3.0 compliant files)
 
 The sample code implements the following actions on the Qualtrics&reg; API located at [https://api.qualtrics.com/](https://api.qualtrics.com/)
 To gain access to the API a Qualtrics account is required.
+
+**Usage**
+
+* Navigate to [https://make.powerapps.com](https://make.powerapps.com).
+* Expand Data > Custom Connectors > New Custom Connector > From OpenAPI file > Select the SWAGGER 2.0 compliant file
+* Setup icon and other options
+
+
 
 **Triggers**
 
