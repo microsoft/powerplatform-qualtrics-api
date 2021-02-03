@@ -57,7 +57,9 @@ DirectoryId and MailingListId can be obtained from the Qualtrics API portal.
 The trigger definition (When a survey response is submitted) registers a webhook endpoint in the Qualtrics API. Microsoft mandates that any trigger that creates a webhook includes a location header to indicate to Power Platform how to de-register the trigger. The LOCATION header points to a DELETE action. As of the time of the publication of this file the Qualtrics API **does not provide a DELETE endpoint**. The DELETE action (Remove event subscription) is only a dummy to make the specification work in PowerPlatform.
 This means that any registered webhook endpoint will continue to receive data until the respective survey is deleted.
 
-# Below figure shows the fully imported API specification in action in Microsoft Power Automate
+## The result in Microsoft Power Automate
+
+![Actions and trigger in PowerAutomate](/PP-Qualtrics-Connector.png)
 
 ## Contributing
 
